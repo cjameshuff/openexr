@@ -1,0 +1,13 @@
+--- configure	2010-07-22 17:59:43.000000000 -0400
++++ configure_patched	2011-05-14 11:52:24.000000000 -0400
+@@ -20844,9 +20844,7 @@
+    { (exit 1); exit 1; }; }
+     fi
+     CXXFLAGS="$CXXFLAGS -isysroot /Developer/SDKs/MacOSX10.4u.sdk -arch ppc -arch i386"
+-      fi
+-
+-  CXXFLAGS="$CXXFLAGS -Wno-long-double"
++  fi
+   ;;
+ esac
+ 

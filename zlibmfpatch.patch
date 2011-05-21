@@ -1,0 +1,10 @@
+--- Makefile	2011-05-14 12:08:39.000000000 -0400
++++ Makefile_patched	2011-05-14 12:10:44.000000000 -0400
+@@ -168,7 +168,6 @@
+ 	-@if [ ! -d $(DESTDIR)$(man3dir)      ]; then mkdir -p $(DESTDIR)$(man3dir); fi
+ 	-@if [ ! -d $(DESTDIR)$(pkgconfigdir) ]; then mkdir -p $(DESTDIR)$(pkgconfigdir); fi
+ 	cp $(STATICLIB) $(DESTDIR)$(libdir)
+-	cp $(SHAREDLIBV) $(DESTDIR)$(sharedlibdir)
+ 	cd $(DESTDIR)$(libdir); chmod u=rw,go=r $(STATICLIB)
+ 	-@(cd $(DESTDIR)$(libdir); $(RANLIB) libz.a || true) >/dev/null 2>&1
+ 	-@cd $(DESTDIR)$(sharedlibdir); if test "$(SHAREDLIBV)" -a -f $(SHAREDLIBV); then \

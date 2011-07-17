@@ -41,6 +41,7 @@ inline VALUE Matrix44_new(const Imath::M44d & vval) {
 }
 
 
+// Fast, unchecked. Use only on self or on objects absolutely known to be of the right type.
 template<typename T>
 inline Imath::Matrix44<T> * GetMatrix44(VALUE value) {
     Imath::Matrix44<T> * val; Data_Get_Struct(value, Imath::Matrix44<T>, val);
@@ -48,6 +49,7 @@ inline Imath::Matrix44<T> * GetMatrix44(VALUE value) {
 }
 
 
+// Copies a matrix into vval or returns false. Checks type, does conversions if necessary.
 template<typename T>
 static bool ToMatrix44(VALUE val, Imath::Matrix44<T> & vval)
 {

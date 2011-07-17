@@ -157,10 +157,12 @@ template<typename T>
 VALUE Matrix44_mult_vec_matrix(VALUE self, VALUE rbvec)
 {
     Matrix44<T> * selfval = GetMatrix44<T>(self);
-    Imath::Vec3<T> * vec = GetVec3<T>(rbvec);
+    Imath::Vec3<T> vec;
+    if(!ToVec3(rbvec, vec))
+        rb_raise(rb_eArgError, "Expected a vector");
+    
     Imath::Vec3<T> result;
-    VALUE arr = rb_ary_new();
-    selfval->multVecMatrix(*vec, result);
+    selfval->multVecMatrix(vec, result);
     return Vec3_new(result);
 }
 
@@ -168,10 +170,12 @@ template<typename T>
 VALUE Matrix44_mult_dir_matrix(VALUE self, VALUE rbvec)
 {
     Matrix44<T> * selfval = GetMatrix44<T>(self);
-    Imath::Vec3<T> * vec = GetVec3<T>(rbvec);
+    Imath::Vec3<T> vec;
+    if(!ToVec3(rbvec, vec))
+        rb_raise(rb_eArgError, "Expected a vector");
+    
     Imath::Vec3<T> result;
-    VALUE arr = rb_ary_new();
-    selfval->multDirMatrix(*vec, result);
+    selfval->multDirMatrix(vec, result);
     return Vec3_new(result);
 }
 
@@ -269,6 +273,133 @@ static VALUE Matrix44_idxeq(VALUE self, VALUE ridx, VALUE cidx, VALUE rhs) {
 //*******************************************************************************
 
 template<typename T>
+VALUE Matrix44_set_euler_angles(VALUE self, VALUE rbvec)
+{
+    Matrix44<T> * selfval = GetMatrix44<T>(self);
+    Imath::Vec3<T> vec;
+    if(!ToVec3(rbvec, vec))
+        rb_raise(rb_eArgError, "Expected a vector");
+    
+    selfval->setEulerAngles(vec);
+    return self;
+}
+
+template<typename T>
+VALUE Matrix44_set_axis_angle(VALUE self, VALUE rbvec, VALUE rbang)
+{
+    Matrix44<T> * selfval = GetMatrix44<T>(self);
+    Imath::Vec3<T> vec;
+    if(!ToVec3(rbvec, vec))
+        rb_raise(rb_eArgError, "Expected a vector");
+    
+    selfval->setAxisAngle(vec, rbpp_num_to<T>(rbang));
+    return self;
+}
+
+template<typename T>
+VALUE Matrix44_rotate(VALUE self, VALUE rbvec)
+{
+    Matrix44<T> * selfval = GetMatrix44<T>(self);
+    Imath::Vec3<T> vec;
+    if(!ToVec3(rbvec, vec))
+        rb_raise(rb_eArgError, "Expected a vector");
+    
+    selfval->rotate(vec);
+    return self;
+}
+
+// efficiency note: several of these functions convert scalars to vectors unnecessarily
+template<typename T>
+VALUE Matrix44_set_scale(VALUE self, VALUE rbvec)
+{
+    Matrix44<T> * selfval = GetMatrix44<T>(self);
+    Imath::Vec3<T> vec;
+    if(!ToVec3(rbvec, vec))
+        rb_raise(rb_eArgError, "Expected a vector");
+    
+    selfval->setScale(vec);
+    return self;
+}
+
+template<typename T>
+VALUE Matrix44_scale(VALUE self, VALUE rbvec)
+{
+    Matrix44<T> * selfval = GetMatrix44<T>(self);
+    Imath::Vec3<T> vec;
+    if(!ToVec3(rbvec, vec))
+        rb_raise(rb_eArgError, "Expected a vector");
+    
+    selfval->scale(vec);
+    return self;
+}
+
+template<typename T>
+VALUE Matrix44_set_translation(VALUE self, VALUE rbvec)
+{
+    Matrix44<T> * selfval = GetMatrix44<T>(self);
+    Imath::Vec3<T> vec;
+    if(!ToVec3(rbvec, vec))
+        rb_raise(rb_eArgError, "Expected a vector");
+    
+    selfval->setTranslation(vec);
+    return self;
+}
+
+template<typename T>
+VALUE Matrix44_translate(VALUE self, VALUE rbvec)
+{
+    Matrix44<T> * selfval = GetMatrix44<T>(self);
+    Imath::Vec3<T> vec;
+    if(!ToVec3(rbvec, vec))
+        rb_raise(rb_eArgError, "Expected a vector");
+    
+    selfval->translate(vec);
+    return self;
+}
+
+template<typename T>
+VALUE Matrix44_translation(VALUE self) {return Vec3_new(GetMatrix44<T>(self)->translation());}
+
+
+template<typename T>
+VALUE Matrix44_set_shear(VALUE self, VALUE rbvec)
+{
+    Matrix44<T> * selfval = GetMatrix44<T>(self);
+    Imath::Vec3<T> vec;
+    if(!ToVec3(rbvec, vec))
+        rb_raise(rb_eArgError, "Expected a vector");
+    
+    selfval->setShear(vec);
+    return self;
+}
+
+template<typename T>
+VALUE Matrix44_shear(VALUE self, VALUE rbvec)
+{
+    Matrix44<T> * selfval = GetMatrix44<T>(self);
+    Imath::Vec3<T> vec;
+    if(!ToVec3(rbvec, vec))
+        rb_raise(rb_eArgError, "Expected a vector");
+    
+    selfval->shear(vec);
+    return self;
+}
+
+template<typename T>
+VALUE Matrix44_base_type_min(VALUE self) {return rbpp_new(GetMatrix44<T>(self)->baseTypeMin());}
+
+template<typename T>
+VALUE Matrix44_base_type_max(VALUE self) {return rbpp_new(GetMatrix44<T>(self)->baseTypeMax());}
+
+template<typename T>
+VALUE Matrix44_base_type_smallest(VALUE self) {return rbpp_new(GetMatrix44<T>(self)->baseTypeSmallest());}
+
+template<typename T>
+VALUE Matrix44_base_type_epsilon(VALUE self) {return rbpp_new(GetMatrix44<T>(self)->baseTypeEpsilon());}
+
+//*******************************************************************************
+
+template<typename T>
 static VALUE Matrix44_to_s(VALUE self, VALUE rhs) {
     stringstream os;
     os << *GetMatrix44<T>(self);
@@ -306,7 +437,6 @@ template<typename T>
 void Init_Matrix44_Class(VALUE m44)
 {
     rb_define_alloc_func(m44, Matrix44_allocate<T>);
-//    rb_define_singleton_method(m44, "allocate", (VALUE (*)(...))M44d_allocate, 0);
     DEF_MTHD(m44, "initialize", Matrix44_init<T>, -1);
     
     DEF_MTHD(m44, "+", Matrix44_add<T>, 1);
@@ -337,23 +467,20 @@ void Init_Matrix44_Class(VALUE m44)
     DEF_MTHD(m44, "gj_invert", Matrix44_gj_invert<T>, 0);
     DEF_MTHD(m44, "gj_inverse", Matrix44_gj_inverse<T>, 0);
     
-    // const Matrix44 &    setEulerAngles (const Vec3<S>& r);
-    // const Matrix44 &    setAxisAngle (const Vec3<S>& ax, S ang);
-    // const Matrix44 &    rotate (const Vec3<S> &r);
-    // const Matrix44 &    setScale (T s);
-    // const Matrix44 &    setScale (const Vec3<S> &s);
-    // const Matrix44 &    scale (const Vec3<S> &s);
-    // const Matrix44 &    setTranslation (const Vec3<S> &t);
-    // const Vec3<T>       translation () const;
-    // const Matrix44 &    translate (const Vec3<S> &t);
-    // const Matrix44 &    setShear (const Vec3<S> &h);
-    // const Matrix44 &    setShear (const Shear6<S> &h);
-    // const Matrix44 &    shear (const Vec3<S> &h);
-    // const Matrix44 &    shear (const Shear6<S> &h);
-    // static T            baseTypeMin()           {return limits<T>::min();}
-    // static T            baseTypeMax()           {return limits<T>::max();}
-    // static T            baseTypeSmallest()      {return limits<T>::smallest();}
-    // static T            baseTypeEpsilon()       {return limits<T>::epsilon();}
+    DEF_MTHD(m44, "set_euler_angles", Matrix44_set_euler_angles<T>, 1);
+    DEF_MTHD(m44, "set_axis_angle", Matrix44_set_axis_angle<T>, 2);
+    DEF_MTHD(m44, "rotate", Matrix44_rotate<T>, 1);
+    DEF_MTHD(m44, "set_scale", Matrix44_set_scale<T>, 1);
+    DEF_MTHD(m44, "scale", Matrix44_scale<T>, 1);
+    DEF_MTHD(m44, "set_translation", Matrix44_set_translation<T>, 1);
+    DEF_MTHD(m44, "translate", Matrix44_translate<T>, 1);
+    DEF_MTHD(m44, "translation", Matrix44_translation<T>, 0);
+    DEF_MTHD(m44, "set_shear", Matrix44_set_shear<T>, 1);
+    DEF_MTHD(m44, "shear", Matrix44_shear<T>, 1);
+    DEF_MTHD(m44, "base_type_min", Matrix44_base_type_min<T>, 0);
+    DEF_MTHD(m44, "base_type_max", Matrix44_base_type_max<T>, 0);
+    DEF_MTHD(m44, "base_type_smallest", Matrix44_base_type_smallest<T>, 0);
+    DEF_MTHD(m44, "base_type_epsilon", Matrix44_base_type_epsilon<T>, 0);
     
     DEF_MTHD(m44, "to_s", Matrix44_to_s<T>, 0);
     

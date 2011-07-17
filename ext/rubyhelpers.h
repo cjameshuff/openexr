@@ -59,6 +59,9 @@ static inline void DEF_MTHD(VALUE obj, const char * name, VALUE(*fn)(VALUE,VALUE
 static inline void DEF_MTHD(VALUE obj, const char * name, VALUE(*fn)(VALUE,VALUE,VALUE), int n) {
     rb_define_method(obj, name, RUBY_METHOD_FUNC(fn), n);
 }
+static inline void DEF_MTHD(VALUE obj, const char * name, VALUE(*fn)(VALUE,VALUE,VALUE,VALUE), int n) {
+    rb_define_method(obj, name, RUBY_METHOD_FUNC(fn), n);
+}
 static inline void DEF_MTHD(VALUE obj, const char * name, VALUE(*fn)(int, VALUE*, VALUE), int n) {
     rb_define_method(obj, name, RUBY_METHOD_FUNC(fn), n);
 }

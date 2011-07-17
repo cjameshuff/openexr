@@ -26,6 +26,13 @@ require 'rake'
 require 'rake/clean'
 require 'rake/gempackagetask'
 require 'rake/extensiontask'
+require "rake/testtask"
+
+Rake::TestTask.new do |t|
+  t.libs << "test"
+  t.test_files = FileList["test/**/test_*.rb"]
+  t.verbose = true
+end
 
 CLEAN.include('ext/*.o')
 CLOBBER.include('ext/clibs')
@@ -93,4 +100,4 @@ file 'ext/clibs' do
     sh "cd #{ZLIBVERSION}; make; make install"
 end
 
-Rake::Task["pkg"].prerequisites.insert(0, 'ext/clibs')
+Rake::Task["compile"].prerequisites.insert(0, 'ext/clibs')

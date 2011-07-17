@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>currentDocument</key>
-	<string>Rakefile</string>
+	<string>ext/clibs/include/OpenEXR/ImathMatrix.h</string>
 	<key>documents</key>
 	<array>
 		<dict>
@@ -18,7 +18,7 @@
 		</dict>
 	</array>
 	<key>fileHierarchyDrawerWidth</key>
-	<integer>222</integer>
+	<integer>316</integer>
 	<key>metaData</key>
 	<dict>
 		<key>LICENSE.txt</key>
@@ -92,6 +92,20 @@
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
 			<integer>61</integer>
+		</dict>
+		<key>ext/clibs/include/OpenEXR/ImathMatrix.h</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>0</integer>
+				<key>line</key>
+				<integer>0</integer>
+			</dict>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>506</integer>
 		</dict>
 		<key>ext/clibs/include/OpenEXR/ImfAcesFile.h</key>
 		<dict>
@@ -383,6 +397,7 @@
 	<key>openDocuments</key>
 	<array>
 		<string>Rakefile</string>
+		<string>ext/clibs/include/OpenEXR/ImathMatrix.h</string>
 		<string>ext/rb_openexr.cpp</string>
 		<string>ext/rb_openexr.h</string>
 		<string>ext/extconf.rb</string>
@@ -407,6 +422,6 @@
 	<key>showFileHierarchyDrawer</key>
 	<true/>
 	<key>windowFrame</key>
-	<string>{{517, 127}, {1208, 931}}</string>
+	<string>{{664, 127}, {1208, 931}}</string>
 </dict>
 </plist>

@@ -21,44 +21,43 @@
 // THE SOFTWARE.
 //*******************************************************************************
 
-#include <cstdlib>
-#include <stdint.h>
-
-#include <algorithm>
-#include <vector>
-
-#include <iostream>
-#include <sstream>
-#include <fstream>
+#ifndef RB_MAT4_H
+#define RB_MAT4_H
 
 #include "ruby.h"
 #include "rubyhelpers.h"
+#include <ImathMatrix.h>
 
-#include "rb_openexr.h"
-#include "rb_vec2.h"
-#include "rb_vec3.h"
-#include "rb_vec4.h"
-#include "rb_mat44.h"
-#include "rb_color4.h"
+extern VALUE class_M44d;
 
-using namespace std;
+void Init_Matrix44();
 
 
-VALUE module_Imath = Qnil;
-VALUE module_Iex = Qnil;
-VALUE module_Imf = Qnil;
-VALUE module_Ilm = Qnil;
-
-extern "C" void Init_openexr_native()
-{
-    module_Imath = rb_define_module("Imath");
-    module_Iex = rb_define_module("Iex");
-    module_Imf = rb_define_module("Imf");
-    module_Ilm = rb_define_module("Ilm");
-    
-    Init_Vec2();
-    Init_Vec3();
-    Init_Vec4();
-    Init_Matrix44();
-    Init_Color4();
+inline VALUE Matrix44_new(const Imath::M44d & vval) {
+    Imath::M44d * cval = new Imath::M44d(vval);
+    VALUE val = Data_Wrap_Struct(class_M44d, NULL, CPP_DeleteFree<Imath::M44d>, (void *)cval);
+    rb_obj_call_init(val, 0, 0);
+    return val;
 }
+
+
+template<typename T>
+inline Imath::Matrix44<T> * GetMatrix44(VALUE value) {
+    Imath::Matrix44<T> * val; Data_Get_Struct(value, Imath::Matrix44<T>, val);
+    return val;
+}
+
+
+template<typename T>
+static bool ToMatrix44(VALUE val, Imath::Matrix44<T> & vval)
+{
+    if(CLASS_OF(val) == class_M44d)
+    {
+        vval = *GetMatrix44<double>(val);
+        return true;
+    }
+    return false;
+}
+
+
+#endif // RB_MAT4_H

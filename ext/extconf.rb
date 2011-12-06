@@ -6,8 +6,13 @@ if enable_config('debug')
 end
 
 # $CFLAGS += " -std=c99"
-$INCFLAGS += " -I../../../../ext/clibs/include"
-$INCFLAGS += " -I../../../../ext/clibs/include/OpenEXR"
+$warnflags = ''
+CONFIG['warnflags'] = ''
+
+# $INCFLAGS += " -I../../../../ext/clibs/include"
+# $INCFLAGS += " -I../../../../ext/clibs/include/OpenEXR"
+$INCFLAGS += " -Iclibs/include"
+$INCFLAGS += " -Iclibs/include/OpenEXR"
 
 $srcs = [
     'rb_openexr.cpp',
@@ -15,9 +20,10 @@ $srcs = [
     'rb_vec3.cpp',
     'rb_vec4.cpp',
     'rb_mat44.cpp',
+    'rb_quat.cpp',
     'rb_color4.cpp'
 ]
-EXRLIBDIR = "../../../../ext/clibs/lib/"
+EXRLIBDIR = "clibs/lib/"
 EXRLIBS = %w[libIlmImf.a libImath.a libIex.a libIlmThread.a libHalf.a].map {|f| EXRLIBDIR + f}
 
 $objs = EXRLIBS + $srcs.map {|f| File.basename(f, ".*") + ".o"}

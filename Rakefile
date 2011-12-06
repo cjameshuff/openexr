@@ -1,80 +1,122 @@
-#*******************************************************************************
-#    Copyright (c) 2011, Christopher James Huff
-#    All rights reserved.
-#
-# Permission is hereby granted, free of charge, to any person obtaining a copy
-# of this software and associated documentation files (the "Software"), to deal
-# in the Software without restriction, including without limitation the rights
-# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-# copies of the Software, and to permit persons to whom the Software is
-# furnished to do so, subject to the following conditions:
-# 
-# The above copyright notice and this permission notice shall be included in
-# all copies or substantial portions of the Software.
-# 
-# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-# THE SOFTWARE.
-#*******************************************************************************
+require "rubygems"
+require "rubygems/package_task"
+require "rdoc/task"
 
-require 'rubygems'
-require 'rake'
-require 'rake/clean'
-require 'rake/gempackagetask'
-require 'rake/extensiontask'
 require "rake/testtask"
-
 Rake::TestTask.new do |t|
   t.libs << "test"
-  t.test_files = FileList["test/**/test_*.rb"]
+  t.test_files = FileList["test/**/*_test.rb"]
   t.verbose = true
 end
 
-CLEAN.include('ext/*.o')
-CLOBBER.include('ext/clibs')
 
-# Define the files that will go into the gem
-gem_files = FileList[
-    "lib/*",
-    "ext/*",
-    "ext/clibs/include/**/*",
-    "ext/clibs/lib/*",
-    'README']
-gem_files = gem_files.exclude("**/*.so", "**/*.o")
+task :default => ["test"]
+
+# This builds the actual gem. For details of what all these options
+# mean, and other ones you can add, check the documentation here:
+#
+#   http://rubygems.org/read/chapter/20
+#
+# CLEAN.include('ext/*.o')
+# CLOBBER.include('ext/clibs')
+
+# gem_files = FileList[
+#     "lib/*",
+#     "ext/*",
+#     "ext/clibs/include/**/*",
+#     "ext/clibs/lib/*",
+#     'README']
+# gem_files = gem_files.exclude("**/*.so", "**/*.o")
 
 spec = Gem::Specification.new do |s|
-    s.name              = "openexr"
-    s.version           = "0.0.1"
-    s.author            = "Christopher James Huff"
-    s.email             = "cjameshuff@gmail.com"
-    s.homepage          = "http://github.com/cjameshuff/openexr"
-    s.platform          = Gem::Platform::RUBY
-    s.summary           = "Bindings for openexr and libilmbase libraries"
-    s.description       = "Bindings for openexr and libilmbase libraries"
-    #s.rubyforge_project = "openexr"
-    s.files             = gem_files
-    s.require_path      = "lib"
-    s.has_rdoc          = false
-    s.add_dependency("rake")
-end
-# p spec.files
+  s.name              = "openexr"
+  s.version           = "0.1.0"
+  s.summary           = "Bindings for openexr and libilmbase libraries"
+  s.author            = "Christopher James Huff"
+  s.email             = "cjameshuff@gmail.com"
+  s.homepage          = "http://github.com/cjameshuff/openexr"
 
-# Create a task for creating a ruby gem
-Rake::GemPackageTask.new(spec) do |pkg|
-    pkg.gem_spec = spec
-    pkg.need_tar = true
+  s.has_rdoc          = true
+  s.extra_rdoc_files  = %w(README.markdown)
+  s.rdoc_options      = %w(--main README.markdown)
+
+  # Add any extra files to include in the gem
+  s.files             = %w(README.markdown) + Dir.glob("{bin,test,lib,ext}/**/*")
+  s.require_paths     = ["lib", "ext"]
+  
+  s.extensions << 'ext/extconf.rb'
+
+  # If your tests use any gems, include them here
+  # s.add_development_dependency("mocha") # for example
 end
 
-Rake::ExtensionTask.new do |ext|
-    ext.name = 'openexr_native'
-    ext.ext_dir = 'ext'
-    ext.lib_dir = 'lib'
-    ext.source_pattern = "*.{c,cpp}"
-    ext.gem_spec = spec
+# This task actually builds the gem. We also regenerate a static
+# .gemspec file, which is useful if something (i.e. GitHub) will
+# be automatically building a gem for this project. If you're not
+# using GitHub, edit as appropriate.
+#
+# To publish your gem online, install the 'gemcutter' gem; Read more 
+# about that here: http://gemcutter.org/pages/gem_docs
+Gem::PackageTask.new(spec) do |pkg|
+  pkg.gem_spec = spec
+end
+
+desc "Build the gemspec file #{spec.name}.gemspec"
+task :gemspec do
+  file = File.dirname(__FILE__) + "/#{spec.name}.gemspec"
+  File.open(file, "w") {|f| f << spec.to_ruby }
+end
+
+desc "Build gem locally"
+task :build => :gemspec do
+  system "gem build #{spec.name}.gemspec"
+  FileUtils.mkdir_p "pkg"
+  FileUtils.mv "#{spec.name}-#{spec.version}.gem", "pkg"
+end
+ 
+desc "Install gem locally"
+task :install => :build do
+  system "gem install pkg/#{spec.name}-#{spec.version}"
+end
+
+# If you don't want to generate the .gemspec file, just remove this line. Reasons
+# why you might want to generate a gemspec:
+#  - using bundler with a git source
+#  - building the gem without rake (i.e. gem build blah.gemspec)
+#  - maybe others?
+task :package => :gemspec
+
+# Generate documentation
+RDoc::Task.new do |rd|
+  rd.main = "README.markdown"
+  rd.rdoc_files.include("README.markdown", "lib/**/*.rb", "ext/**/*.c", "ext/**/*.h")
+  rd.rdoc_dir = "rdoc"
+end
+
+desc 'Clear out RDoc and generated packages'
+task :clean => [:clobber_rdoc, :clobber_package] do
+  rm "#{spec.name}.gemspec"
+end
+
+desc 'Tag the repository in git with gem version number'
+task :tag => [:gemspec, :package] do
+  if `git diff --cached`.empty?
+    if `git tag`.split("\n").include?("v#{spec.version}")
+      raise "Version #{spec.version} has already been released"
+    end
+    `git add #{File.expand_path("../#{spec.name}.gemspec", __FILE__)}`
+    `git commit -m "Released version #{spec.version}"`
+    `git tag v#{spec.version}`
+    `git push --tags`
+    `git push`
+  else
+    raise "Unstaged changes still waiting to be committed"
+  end
+end
+
+desc "Tag and publish the gem to rubygems.org"
+task :publish => :tag do
+  `gem push pkg/#{spec.name}-#{spec.version}.gem`
 end
 
 ILMVERSION = 'ilmbase-1.0.2'
@@ -100,4 +142,5 @@ file 'ext/clibs' do
     sh "cd #{ZLIBVERSION}; make; make install"
 end
 
-Rake::Task["compile"].prerequisites.insert(0, 'ext/clibs')
+Rake::Task["build"].prerequisites.insert(0, 'ext/clibs')
+

@@ -55,7 +55,7 @@ static VALUE Vec4_allocate(VALUE klass) {
 //*******************************************************************************
 
 template<typename T>
-static VALUE Vec4_init(int argc, VALUE *argv, VALUE self)
+static VALUE Vec4_init(int argc, VALUE * argv, VALUE self)
 {
     // Possible argument combinations:
     // initialize()
@@ -74,7 +74,6 @@ static VALUE Vec4_init(int argc, VALUE *argv, VALUE self)
     rb_scan_args(argc, argv, "04", &a, &b, &c, &d);
     
     Vec4<T> * selfval = GetVec4<T>(self), vval;
-    
     if(argc == 1)
     {
         if(ToVec4(a, vval))
@@ -147,6 +146,11 @@ static VALUE Vec4_div(VALUE self, VALUE rhs) {
     if(ToVec4(rhs, rhsval))
         return Vec4_new(*selfval / rhsval);
     else rb_raise(rb_eArgError, "Expected a V4d, Array, or numeric type");
+}
+
+template<typename T>
+static VALUE Vec4_neg(VALUE self) {
+    return Vec4_new(-*GetVec4<T>(self));
 }
 
 //*******************************************************************************
@@ -277,6 +281,8 @@ void Init_Vec4_Class(VALUE vec4)
     DEF_MTHD(vec4, "-", Vec4_sub<T>, 1);
     DEF_MTHD(vec4, "*", Vec4_mul<T>, 1);
     DEF_MTHD(vec4, "/", Vec4_div<T>, 1);
+    
+    DEF_MTHD(vec4, "-@", Vec4_neg<T>, 0);
     
     DEF_MTHD(vec4, "coerce", Vec4_coerce<T>, 1);
     

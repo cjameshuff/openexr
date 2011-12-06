@@ -21,46 +21,62 @@
 // THE SOFTWARE.
 //*******************************************************************************
 
-#ifndef RB_MAT4_H
-#define RB_MAT4_H
+#ifndef RB_QUAT_H
+#define RB_QUAT_H
 
 #include "ruby.h"
 #include "rubyhelpers.h"
+#include <ImathVec.h>
 #include <ImathMatrix.h>
+#include <ImathQuat.h>
 
-extern VALUE class_M44d;
+extern VALUE class_Quatd;
 
-void Init_Matrix44();
+void Init_Quat();
 
 
-inline VALUE Matrix44_new(const Imath::M44d & vval) {
-    Imath::M44d * cval = new Imath::M44d(vval);
-    VALUE val = Data_Wrap_Struct(class_M44d, NULL, CPP_DeleteFree<Imath::M44d>, (void *)cval);
+inline VALUE Quat_new(const Imath::Quatd & qval) {
+    Imath::Quatd * cval = new Imath::Quatd(qval);
+    VALUE val = Data_Wrap_Struct(class_Quatd, NULL, CPP_DeleteFree<Imath::Quatd>, (void *)cval);
     rb_obj_call_init(val, 0, 0);
     return val;
 }
-inline VALUE rbpp_new(const Imath::M44d & val) {return Matrix44_new(val);}
+inline VALUE rbpp_new(const Imath::Quatd & qval) {return Quat_new(qval);}
 
 
-// Fast, unchecked. Use only on self or on objects absolutely known to be of the right type.
 template<typename T>
-inline Imath::Matrix44<T> * GetMatrix44(VALUE value) {
-    Imath::Matrix44<T> * val; Data_Get_Struct(value, Imath::Matrix44<T>, val);
+inline Imath::Quat<T> * GetQuat(VALUE value) {
+    Imath::Quat<T> * val; Data_Get_Struct(value, Imath::Quat<T>, val);
     return val;
 }
 
 
-// Copies a matrix into vval or returns false. Checks type, does conversions if necessary.
 template<typename T>
-static bool ToMatrix44(VALUE val, Imath::Matrix44<T> & vval)
+static bool ToQuat(VALUE val, Imath::Quat<T> & qval)
 {
-    if(CLASS_OF(val) == class_M44d)
+    if(CLASS_OF(val) == class_Quatd) {
+        qval = *GetQuat<double>(val);
+        return true;
+    }
+    else if(IsType(val, T_ARRAY) && RARRAY_LEN(val) == 4)
     {
-        vval = *GetMatrix44<double>(val);
+        qval.r = rbpp_num_to<T>(rb_ary_entry(val, 0));
+        qval.v.x = rbpp_num_to<T>(rb_ary_entry(val, 1));
+        qval.v.y = rbpp_num_to<T>(rb_ary_entry(val, 2));
+        qval.v.z = rbpp_num_to<T>(rb_ary_entry(val, 3));
         return true;
     }
     return false;
 }
 
+template<typename T>
+static Imath::Quat<T> RequireQuat(VALUE rb_val)
+{
+    Imath::Quat<T> vval;
+    if(ToQuat(rb_val, vval))
+        return vval;
+    else rb_raise(rb_eArgError, "Expected a Quat");
+}
 
-#endif // RB_MAT4_H
+
+#endif // RB_QUAT_H

@@ -40,6 +40,9 @@ template<typename T> T rbpp_num_to(VALUE);
 template<> static inline double rbpp_num_to<double>(VALUE val) {return NUM2DBL(val);}
 template<> static inline int rbpp_num_to<int>(VALUE val) {return NUM2INT(val);}
 template<> static inline unsigned int rbpp_num_to<unsigned int>(VALUE val) {return NUM2UINT(val);}
+template<> static inline long rbpp_num_to<long>(VALUE val) {return NUM2LONG(val);}
+template<> static inline unsigned long rbpp_num_to<unsigned long>(VALUE val) {return NUM2ULONG(val);}
+template<> static inline char rbpp_num_to<char>(VALUE val) {return NUM2CHR(val);}
 
 static inline VALUE rbpp_new(double val) {return rb_float_new(val);}
 static inline VALUE rbpp_new(int val) {return rb_int_new(val);}
@@ -84,5 +87,45 @@ static inline void DEF_SING_MTHD(VALUE obj, const char * name, VALUE(*fn)(int, V
     rb_define_singleton_method(obj, name, RUBY_METHOD_FUNC(fn), n);
 }
 
+//*******************************************************************************
+
+struct RubyNumeric {
+    VALUE value;
+    RubyNumeric(VALUE val = Qnil): value(val) {}
+    RubyNumeric(const RubyNumeric & rhs): value(rhs.val) {}
+    
+    RubyNumeric & operator=(const RubyNumeric & rhs) {
+        value = rhs.value;
+    }
+    void mark() {rb_gc_mark(value);}
+    
+    static ID id_plus;
+    void Initialize() {
+        id_minus_at = rb_intern("-@");
+        id_plus = rb_intern("+");
+        id_minus = rb_intern("-");
+        id_plus = rb_intern("*");
+        id_plus = rb_intern("/");
+    }
+};
+
+static inline RubyNumeric operator-(const RubyNumeric & rhs) {}
+
+#define RUBYNUMERIC_UNARYOP(cop, rop) \
+static inline RubyNumeric operator cop(const RubyNumeric & rhs) { \
+    return RubyNumeric(rb_funcall(rhs.value, rop)); \
+}
+RUBYNUMERIC_UNARYOP(-, id_minus_at)
+
+#define RUBYNUMERIC_BINOP(cop, rop) \
+static inline RubyNumeric operator cop(const RubyNumeric & lhs, const RubyNumeric & rhs) { \
+    return RubyNumeric(rb_funcall(lhs.value, rop, 1, rhs.value)); \
+}
+RUBYNUMERIC_BINOP(+, id_plus)
+RUBYNUMERIC_BINOP(-, id_minus)
+RUBYNUMERIC_BINOP(*, id_asterisk)
+RUBYNUMERIC_BINOP(/, id_slash)
+
+//*******************************************************************************
 
 #endif RUBYHELPERS_H

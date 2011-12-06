@@ -45,7 +45,7 @@ static VALUE Color4_allocate(VALUE klass) {
 //*******************************************************************************
 
 template<typename T>
-static VALUE Color4_init(int argc, VALUE *argv, VALUE self)
+static VALUE Color4_init(int argc, VALUE * argv, VALUE self)
 {
     // Possible argument combinations:
     // initialize()

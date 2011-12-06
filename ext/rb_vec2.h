@@ -46,6 +46,8 @@ inline VALUE Vec2_new(const Imath::V2i & vval) {
     rb_obj_call_init(val, 0, 0);
     return val;
 }
+inline VALUE rbpp_new(const Imath::V2d & val) {return Vec2_new(val);}
+inline VALUE rbpp_new(const Imath::V2i & val) {return Vec2_new(val);}
 
 
 template<typename T>
@@ -90,6 +92,15 @@ static bool ToVec2(VALUE val, Imath::Vec2<T> & vval)
         return true;
     }
     return false;
+}
+
+template<typename T>
+static Imath::Vec2<T> RequireVec2(VALUE rb_val)
+{
+    Imath::Vec2<T> vval;
+    if(ToVec2(rb_val, vval))
+        return vval;
+    else rb_raise(rb_eArgError, "Can not be converted to V2.");
 }
 
 

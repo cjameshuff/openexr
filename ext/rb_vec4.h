@@ -46,6 +46,8 @@ inline VALUE Vec4_new(const Imath::V4i & vval) {
     rb_obj_call_init(val, 0, 0);
     return val;
 }
+inline VALUE rbpp_new(const Imath::V4d & val) {return Vec4_new(val);}
+inline VALUE rbpp_new(const Imath::V4i & val) {return Vec4_new(val);}
 
 
 template<typename T>
@@ -110,6 +112,15 @@ static bool ToVec4(VALUE val, Imath::Vec4<T> & vval)
         return true;
     }
     return false;
+}
+
+template<typename T>
+static Imath::Vec4<T> RequireVec4(VALUE rb_val)
+{
+    Imath::Vec4<T> vval;
+    if(ToVec4(rb_val, vval))
+        return vval;
+    else rb_raise(rb_eArgError, "Can not be converted to V4.");
 }
 
 

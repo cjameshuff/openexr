@@ -50,7 +50,7 @@ static VALUE Vec2_allocate(VALUE klass) {
 //*******************************************************************************
 
 template<typename T>
-static VALUE Vec2_init(int argc, VALUE *argv, VALUE self)
+static VALUE Vec2_init(int argc, VALUE * argv, VALUE self)
 {
     // Possible argument combinations:
     // initialize()
@@ -128,6 +128,11 @@ static VALUE Vec2_div(VALUE self, VALUE rhs) {
     if(ToVec2(rhs, rhsval))
         return Vec2_new(*selfval / rhsval);
     else rb_raise(rb_eArgError, "Expected a Vec2, Array, or numeric type");
+}
+
+template<typename T>
+static VALUE Vec2_neg(VALUE self) {
+    return Vec2_new(-*GetVec2<T>(self));
 }
 
 //*******************************************************************************
@@ -240,6 +245,8 @@ void Init_Vec2_Class(VALUE vec2)
     DEF_MTHD(vec2, "-", Vec2_sub<T>, 1);
     DEF_MTHD(vec2, "*", Vec2_mul<T>, 1);
     DEF_MTHD(vec2, "/", Vec2_div<T>, 1);
+    
+    DEF_MTHD(vec2, "-@", Vec2_neg<T>, 0);
     
     DEF_MTHD(vec2, "coerce", Vec2_coerce<T>, 1);
     

@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>currentDocument</key>
-	<string>ext/clibs/include/OpenEXR/ImathMatrix.h</string>
+	<string>ext/rb_mat44.cpp</string>
 	<key>documents</key>
 	<array>
 		<dict>
@@ -21,77 +21,19 @@
 	<integer>316</integer>
 	<key>metaData</key>
 	<dict>
-		<key>LICENSE.txt</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>0</integer>
-				<key>line</key>
-				<integer>0</integer>
-			</dict>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>0</integer>
-		</dict>
 		<key>Rakefile</key>
 		<dict>
 			<key>caret</key>
 			<dict>
 				<key>column</key>
-				<integer>8</integer>
+				<integer>19</integer>
 				<key>line</key>
-				<integer>34</integer>
+				<integer>102</integer>
 			</dict>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
-			<integer>22</integer>
-		</dict>
-		<key>ext/clibs/include/OpenEXR/IexMathExc.h</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>11</integer>
-				<key>line</key>
-				<integer>41</integer>
-			</dict>
-			<key>columnSelection</key>
-			<false/>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>0</integer>
-			<key>selectFrom</key>
-			<dict>
-				<key>column</key>
-				<integer>10</integer>
-				<key>line</key>
-				<integer>41</integer>
-			</dict>
-			<key>selectTo</key>
-			<dict>
-				<key>column</key>
-				<integer>13</integer>
-				<key>line</key>
-				<integer>41</integer>
-			</dict>
-		</dict>
-		<key>ext/clibs/include/OpenEXR/IlmThreadSemaphore.h</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>0</integer>
-				<key>line</key>
-				<integer>0</integer>
-			</dict>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>61</integer>
+			<integer>54</integer>
 		</dict>
 		<key>ext/clibs/include/OpenEXR/ImathMatrix.h</key>
 		<dict>
@@ -105,39 +47,9 @@
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
-			<integer>506</integer>
+			<integer>497</integer>
 		</dict>
-		<key>ext/clibs/include/OpenEXR/ImfAcesFile.h</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>10</integer>
-				<key>line</key>
-				<integer>86</integer>
-			</dict>
-			<key>columnSelection</key>
-			<false/>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>48</integer>
-			<key>selectFrom</key>
-			<dict>
-				<key>column</key>
-				<integer>10</integer>
-				<key>line</key>
-				<integer>86</integer>
-			</dict>
-			<key>selectTo</key>
-			<dict>
-				<key>column</key>
-				<integer>13</integer>
-				<key>line</key>
-				<integer>86</integer>
-			</dict>
-		</dict>
-		<key>ext/clibs/include/OpenEXR/ImfArray.h</key>
+		<key>ext/clibs/include/OpenEXR/ImathVec.h</key>
 		<dict>
 			<key>caret</key>
 			<dict>
@@ -149,63 +61,63 @@
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
-			<integer>0</integer>
+			<integer>367</integer>
 		</dict>
 		<key>ext/extconf.rb</key>
 		<dict>
 			<key>caret</key>
 			<dict>
 				<key>column</key>
-				<integer>0</integer>
+				<integer>12</integer>
 				<key>line</key>
-				<integer>20</integer>
+				<integer>16</integer>
 			</dict>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
 			<integer>0</integer>
 		</dict>
-		<key>ext/rb_color4.cpp</key>
+		<key>ext/rb_mat44.cpp</key>
 		<dict>
 			<key>caret</key>
 			<dict>
 				<key>column</key>
-				<integer>23</integer>
+				<integer>39</integer>
 				<key>line</key>
-				<integer>30</integer>
+				<integer>451</integer>
 			</dict>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
-			<integer>0</integer>
+			<integer>102</integer>
 		</dict>
-		<key>ext/rb_color4.h</key>
+		<key>ext/rb_mat44.h</key>
 		<dict>
 			<key>caret</key>
 			<dict>
 				<key>column</key>
-				<integer>11</integer>
+				<integer>14</integer>
 				<key>line</key>
-				<integer>23</integer>
+				<integer>51</integer>
 			</dict>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
-			<integer>19</integer>
+			<integer>16</integer>
 		</dict>
 		<key>ext/rb_openexr.cpp</key>
 		<dict>
 			<key>caret</key>
 			<dict>
 				<key>column</key>
-				<integer>13</integer>
+				<integer>17</integer>
 				<key>line</key>
-				<integer>40</integer>
+				<integer>61</integer>
 			</dict>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
-			<integer>13</integer>
+			<integer>15</integer>
 		</dict>
 		<key>ext/rb_openexr.h</key>
 		<dict>
@@ -237,75 +149,35 @@
 				<integer>28</integer>
 			</dict>
 		</dict>
-		<key>ext/rb_vec2.cpp</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>23</integer>
-				<key>line</key>
-				<integer>33</integer>
-			</dict>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>0</integer>
-		</dict>
-		<key>ext/rb_vec2.h</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>13</integer>
-				<key>line</key>
-				<integer>95</integer>
-			</dict>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>47</integer>
-		</dict>
-		<key>ext/rb_vec3.cpp</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>23</integer>
-				<key>line</key>
-				<integer>33</integer>
-			</dict>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>0</integer>
-		</dict>
 		<key>ext/rb_vec3.h</key>
 		<dict>
 			<key>caret</key>
 			<dict>
 				<key>column</key>
-				<integer>13</integer>
+				<integer>24</integer>
 				<key>line</key>
-				<integer>107</integer>
+				<integer>51</integer>
 			</dict>
+			<key>columnSelection</key>
+			<false/>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
-			<integer>59</integer>
-		</dict>
-		<key>ext/rb_vec4.cpp</key>
-		<dict>
-			<key>caret</key>
+			<integer>28</integer>
+			<key>selectFrom</key>
 			<dict>
 				<key>column</key>
-				<integer>23</integer>
+				<integer>30</integer>
 				<key>line</key>
-				<integer>33</integer>
+				<integer>51</integer>
 			</dict>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>0</integer>
+			<key>selectTo</key>
+			<dict>
+				<key>column</key>
+				<integer>24</integer>
+				<key>line</key>
+				<integer>51</integer>
+			</dict>
 		</dict>
 		<key>ext/rb_vec4.h</key>
 		<dict>
@@ -314,26 +186,58 @@
 				<key>column</key>
 				<integer>13</integer>
 				<key>line</key>
-				<integer>115</integer>
+				<integer>36</integer>
 			</dict>
+			<key>columnSelection</key>
+			<false/>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
-			<integer>1</integer>
+			<integer>9</integer>
+			<key>selectFrom</key>
+			<dict>
+				<key>column</key>
+				<integer>46</integer>
+				<key>line</key>
+				<integer>36</integer>
+			</dict>
+			<key>selectTo</key>
+			<dict>
+				<key>column</key>
+				<integer>13</integer>
+				<key>line</key>
+				<integer>36</integer>
+			</dict>
 		</dict>
-		<key>lib/openexr.rb</key>
+		<key>ext/rubyhelpers.h</key>
 		<dict>
 			<key>caret</key>
 			<dict>
 				<key>column</key>
-				<integer>23</integer>
+				<integer>38</integer>
 				<key>line</key>
-				<integer>1</integer>
+				<integer>39</integer>
 			</dict>
+			<key>columnSelection</key>
+			<false/>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
-			<integer>0</integer>
+			<integer>24</integer>
+			<key>selectFrom</key>
+			<dict>
+				<key>column</key>
+				<integer>32</integer>
+				<key>line</key>
+				<integer>39</integer>
+			</dict>
+			<key>selectTo</key>
+			<dict>
+				<key>column</key>
+				<integer>43</integer>
+				<key>line</key>
+				<integer>39</integer>
+			</dict>
 		</dict>
 		<key>test/helper.rb</key>
 		<dict>
@@ -342,7 +246,7 @@
 				<key>column</key>
 				<integer>0</integer>
 				<key>line</key>
-				<integer>0</integer>
+				<integer>11</integer>
 			</dict>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
@@ -367,9 +271,9 @@
 			<key>selectFrom</key>
 			<dict>
 				<key>column</key>
-				<integer>13</integer>
+				<integer>0</integer>
 				<key>line</key>
-				<integer>5</integer>
+				<integer>43</integer>
 			</dict>
 			<key>selectTo</key>
 			<dict>
@@ -384,7 +288,7 @@
 			<key>caret</key>
 			<dict>
 				<key>column</key>
-				<integer>0</integer>
+				<integer>19</integer>
 				<key>line</key>
 				<integer>0</integer>
 			</dict>
@@ -397,27 +301,19 @@
 	<key>openDocuments</key>
 	<array>
 		<string>Rakefile</string>
-		<string>ext/clibs/include/OpenEXR/ImathMatrix.h</string>
 		<string>ext/rb_openexr.cpp</string>
 		<string>ext/rb_openexr.h</string>
 		<string>ext/extconf.rb</string>
+		<string>ext/rb_mat44.h</string>
+		<string>ext/rb_vec3.h</string>
+		<string>ext/rubyhelpers.h</string>
+		<string>ext/rb_mat44.cpp</string>
+		<string>ext/clibs/include/OpenEXR/ImathVec.h</string>
+		<string>ext/clibs/include/OpenEXR/ImathMatrix.h</string>
+		<string>test/simpletest.rb</string>
 		<string>test/helper.rb</string>
 		<string>test/test_openexr.rb</string>
-		<string>test/simpletest.rb</string>
-		<string>ext/clibs/include/OpenEXR/IlmThreadSemaphore.h</string>
-		<string>ext/clibs/include/OpenEXR/ImfArray.h</string>
-		<string>ext/clibs/include/OpenEXR/ImfAcesFile.h</string>
-		<string>ext/clibs/include/OpenEXR/IexMathExc.h</string>
-		<string>ext/rb_vec2.h</string>
-		<string>ext/rb_vec3.h</string>
-		<string>ext/rb_vec3.cpp</string>
-		<string>ext/rb_vec4.cpp</string>
 		<string>ext/rb_vec4.h</string>
-		<string>ext/rb_color4.h</string>
-		<string>ext/rb_color4.cpp</string>
-		<string>ext/rb_vec2.cpp</string>
-		<string>LICENSE.txt</string>
-		<string>lib/openexr.rb</string>
 	</array>
 	<key>showFileHierarchyDrawer</key>
 	<true/>

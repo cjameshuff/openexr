@@ -39,10 +39,17 @@
 #include "rb_vec3.h"
 #include "rb_vec4.h"
 #include "rb_mat44.h"
+#include "rb_quat.h"
 #include "rb_color4.h"
 
 using namespace std;
 
+/* 
+ * Document-module: Imath
+ * 
+ * Bindings for libilmbase library.
+ *
+ */
 
 VALUE module_Imath = Qnil;
 VALUE module_Iex = Qnil;
@@ -60,5 +67,12 @@ extern "C" void Init_openexr_native()
     Init_Vec3();
     Init_Vec4();
     Init_Matrix44();
+    Init_Quat();
+    // TODO: Color3
     Init_Color4();
+    
+    // TODO: Following from ImathMath
+// T sinx_over_x(T x)
+// bool equalWithAbsError(T x1, T x2, T e)
+// bool equalWithRelError(T x1, T x2, T e)
 }

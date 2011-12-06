@@ -46,6 +46,8 @@ inline VALUE Vec3_new(const Imath::V3i & vval) {
     rb_obj_call_init(val, 0, 0);
     return val;
 }
+inline VALUE rbpp_new(const Imath::V3d & val) {return Vec3_new(val);}
+inline VALUE rbpp_new(const Imath::V3i & val) {return Vec3_new(val);}
 
 
 template<typename T>
@@ -104,5 +106,13 @@ static bool ToVec3(VALUE val, Imath::Vec3<T> & vval)
     return false;
 }
 
+template<typename T>
+static Imath::Vec3<T> RequireVec3(VALUE rb_val)
+{
+    Imath::Vec3<T> vval;
+    if(ToVec3(rb_val, vval))
+        return vval;
+    else rb_raise(rb_eArgError, "Can not be converted to V3.");
+}
 
 #endif // RB_VEC3_H

@@ -55,7 +55,7 @@ static VALUE Vec3_allocate(VALUE klass) {
 //*******************************************************************************
 
 template<typename T>
-static VALUE Vec3_init(int argc, VALUE *argv, VALUE self)
+static VALUE Vec3_init(int argc, VALUE * argv, VALUE self)
 {
     // Possible argument combinations:
     // initialize()
@@ -80,19 +80,20 @@ static VALUE Vec3_init(int argc, VALUE *argv, VALUE self)
         if(ToVec3(a, vval))
             *selfval = vval;
         else
-        	rb_raise(rb_eArgError, "Expected a numeric type, Vec3, or Array");
+            rb_raise(rb_eArgError, "Expected a numeric type, Vec3, or Array");
     }
     else if(argc == 2)
     {
         if(IsNumType(a)) {
             selfval->x = rbpp_num_to<T>(a);
             selfval->y = rbpp_num_to<T>(b);
+            selfval->z = 0;
         }
         else if(ToVec3(a, vval)) {
-            *selfval = (vval)*(rbpp_num_to<T>(b)/vval.length());
+            *selfval = vval*(rbpp_num_to<T>(b)/vval.length());
         }
         else {
-        	rb_raise(rb_eArgError, "Expected a numeric type, Vec3, or Array");
+            rb_raise(rb_eArgError, "Expected a numeric type, Vec3, or Array");
         }
     }
     else if(argc == 3)
@@ -102,7 +103,7 @@ static VALUE Vec3_init(int argc, VALUE *argv, VALUE self)
         selfval->z = rbpp_num_to<T>(c);
     }
     else {
-    	rb_raise(rb_eArgError, "Expected 1, 2, or 3 arguments");
+        rb_raise(rb_eArgError, "Expected 1, 2, or 3 arguments");
     }
     return self;
 }
@@ -111,44 +112,34 @@ static VALUE Vec3_init(int argc, VALUE *argv, VALUE self)
 
 template<typename T>
 static VALUE Vec3_add(VALUE self, VALUE rhs) {
-    Vec3<T> * selfval = GetVec3<T>(self), rhsval;
-    if(ToVec3(rhs, rhsval))
-        return Vec3_new(*selfval + rhsval);
-    else rb_raise(rb_eArgError, "Expected a V3d, Array, or numeric type");
+    return Vec3_new(*GetVec3<T>(self) + RequireVec3<T>(rhs));
 }
 
 template<typename T>
 static VALUE Vec3_sub(VALUE self, VALUE rhs) {
-    Vec3<T> * selfval = GetVec3<T>(self), rhsval;
-    if(ToVec3(rhs, rhsval))
-        return Vec3_new(*selfval - rhsval);
-    else rb_raise(rb_eArgError, "Expected a V3d, Array, or numeric type");
+    return Vec3_new(*GetVec3<T>(self) - RequireVec3<T>(rhs));
 }
 
 template<typename T>
 static VALUE Vec3_mul(VALUE self, VALUE rhs) {
-    Vec3<T> * selfval = GetVec3<T>(self), rhsval;
-    if(ToVec3(rhs, rhsval))
-        return Vec3_new(*selfval * rhsval);
-    else rb_raise(rb_eArgError, "Expected a V3d, Array, or numeric type");
+    return Vec3_new(*GetVec3<T>(self)*RequireVec3<T>(rhs));
 }
 
 template<typename T>
 static VALUE Vec3_div(VALUE self, VALUE rhs) {
-    Vec3<T> * selfval = GetVec3<T>(self), rhsval;
-    if(ToVec3(rhs, rhsval))
-        return Vec3_new(*selfval / rhsval);
-    else rb_raise(rb_eArgError, "Expected a V3d, Array, or numeric type");
+    return Vec3_new(*GetVec3<T>(self)/RequireVec3<T>(rhs));
+}
+
+template<typename T>
+static VALUE Vec3_neg(VALUE self) {
+    return Vec3_new(-*GetVec3<T>(self));
 }
 
 //*******************************************************************************
 
 template<typename T>
 static VALUE Vec3_coerce(VALUE self, VALUE lhs) {
-    Vec3<T> lhsval;
-    if(!ToVec3(lhs, lhsval))
-    	rb_raise(rb_eArgError, "LHS must be a Vec3, Array, or numeric type");
-    
+    Vec3<T> lhsval = RequireVec3<T>(lhs);
     VALUE arr = rb_ary_new();
     rb_ary_push(arr, Vec3_new(lhsval));
     rb_ary_push(arr, self);
@@ -159,20 +150,12 @@ static VALUE Vec3_coerce(VALUE self, VALUE lhs) {
 
 template<typename T>
 static VALUE Vec3_cross(VALUE self, VALUE rhs) {
-    Vec3<T> * selfval = GetVec3<T>(self), rhsval;
-    if(ToVec3(rhs, rhsval))
-        return Vec3_new(selfval->cross(rhsval));
-    else
-    	rb_raise(rb_eArgError, "Expected a Vec3, Array, or numeric type");
+    return Vec3_new(GetVec3<T>(self)->cross(RequireVec3<T>(rhs)));
 }
 
 template<typename T>
 static VALUE Vec3_dot(VALUE self, VALUE rhs) {
-    Vec3<T> * selfval = GetVec3<T>(self), rhsval;
-    if(ToVec3(rhs, rhsval))
-        return rbpp_new(selfval->dot(rhsval));
-    else
-    	rb_raise(rb_eArgError, "Expected a Vec3, Array, or numeric type");
+    return rbpp_new(GetVec3<T>(self)->dot(RequireVec3<T>(rhs)));
 }
 
 //*******************************************************************************
@@ -270,6 +253,8 @@ void Init_Vec3_Class(VALUE vec3)
     DEF_MTHD(vec3, "*", Vec3_mul<T>, 1);
     DEF_MTHD(vec3, "/", Vec3_div<T>, 1);
     
+    DEF_MTHD(vec3, "-@", Vec3_neg<T>, 0);
+    
     DEF_MTHD(vec3, "coerce", Vec3_coerce<T>, 1);
     
     DEF_MTHD(vec3, "cross", Vec3_cross<T>, 1);
@@ -306,11 +291,11 @@ void Init_Vec3()
     Init_Vec3_Class<int>(class_V3i);
 }
 
-
-
-//*******************************************************************************
-
+// TODO: following from ImathVecAlgo
 //template <class Vec> Vec        project (const Vec &s, const Vec &t);
 //template <class Vec> Vec        orthogonal (const Vec &s, const Vec &t);
 //template <class Vec> Vec        reflect (const Vec &s, const Vec &t);
 //template <class Vec> Vec        closestVertex (const Vec &v0, const Vec &v1, const Vec &v2, const Vec &p);
+
+
+//*******************************************************************************

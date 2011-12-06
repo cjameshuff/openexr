@@ -50,7 +50,7 @@ static VALUE Matrix44_allocate(VALUE klass) {
 //*******************************************************************************
 
 template<typename T>
-static VALUE Matrix44_init(int argc, VALUE *argv, VALUE self)
+static VALUE Matrix44_init(int argc, VALUE * argv, VALUE self)
 {
     // Possible argument combinations:
     // initialize()
@@ -149,6 +149,11 @@ static VALUE Matrix44_div(VALUE self, VALUE rhs) {
     //     return Matrix44_new(*selfval / rhsval);
     // else rb_raise(rb_eArgError, "Expected a Matrix44, Array, or numeric type");
     rb_raise(rb_eArgError, "Feature not yet implemented");
+}
+
+template<typename T>
+static VALUE Matrix44_neg(VALUE self) {
+    return Matrix44_new(-*GetMatrix44<T>(self));
 }
 
 //*******************************************************************************
@@ -441,6 +446,7 @@ void Init_Matrix44_Class(VALUE m44)
     
     DEF_MTHD(m44, "+", Matrix44_add<T>, 1);
     DEF_MTHD(m44, "-", Matrix44_sub<T>, 1);
+    DEF_MTHD(m44, "-@", Matrix44_neg<T>, 0);
     DEF_MTHD(m44, "*", Matrix44_mul<T>, 1);
     DEF_MTHD(m44, "/", Matrix44_div<T>, 1);
     
